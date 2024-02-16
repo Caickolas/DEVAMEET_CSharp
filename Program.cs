@@ -1,5 +1,9 @@
+using DEVAMEET_CSharp;
 using DEVAMEET_CSharp.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +16,26 @@ builder.Services.AddSwaggerGen();
 
 var connectstring = builder.Configuration.GetConnectionString("DefaulConnectString");
 builder.Services.AddDbContext<DevameetContext>(option => option.UseSqlServer(connectstring));
+
+var jwtsettings = builder.Configuration.GetRequiredSection("JWT").Get<JWTKey>();
+
+var secretKey = Encoding.ASCII.GetBytes(jwtsettings.SecretKey);
+builder.Services.AddAuthentication(auth =>
+{
+    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(authentication =>
+{
+    authentication.RequireHttpsMetadata = false;
+    authentication.SaveToken = true;
+    authentication.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 var app = builder.Build();
 
