@@ -14,8 +14,11 @@ namespace DEVAMEET_CSharp.Repository.Impl
         public User GetUserByLoginPassword(string login, string password)
         {
             return _context.Users.FirstOrDefault(u => u.Email == login && u.Password == password);
+        }
 
-
+        public User GetUserByLogin(int iduser)
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == iduser);
         }
 
         public void Save(User user)
