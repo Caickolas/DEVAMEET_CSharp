@@ -8,5 +8,6 @@ namespace DEVAMEET_CSharp.Repository
         void Save(User user);
         bool VerifyEmail(string email);
         User GetUserByLogin(int iduser);
+        void UpdateUser(User user);
     }
 }

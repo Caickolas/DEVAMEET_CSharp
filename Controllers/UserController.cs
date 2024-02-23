@@ -7,7 +7,6 @@ namespace DEVAMEET_CSharp.Controllers
 {
 
     [ApiController]
-    [Route("api/[controller]")]
     public class UserController : BaseController
     {
         private readonly ILogger<AuthController> _logger;
@@ -19,6 +18,7 @@ namespace DEVAMEET_CSharp.Controllers
         }
 
         [HttpGet]
+        [Route("api/[controller]")]
         public IActionResult GetUser()
         {
             try
@@ -68,5 +68,65 @@ namespace DEVAMEET_CSharp.Controllers
                 });
             }
         }
+
+
+        [HttpPut]
+        [Route("api/[controller]")]
+        public IActionResult UpdateUser([FromBody] UserRequestDto userdto)
+        {
+            try
+            {
+                User user = GetToken();
+
+                if (user != null)
+                {
+
+                    if (!String.IsNullOrEmpty(user.Name) && !String.IsNullOrEmpty(user.Avatar) &&
+                    !String.IsNullOrWhiteSpace(user.Name) && !String.IsNullOrWhiteSpace(user.Avatar))
+                    {
+                        user.Avatar = userdto.Avatar;
+                        user.Name = userdto.Name;
+
+                        _userRepository.UpdateUser(user);
+
+                        return Ok("Usuario salvo com sucesso!");
+                    }
+                    else
+                    {
+                        _logger.LogError("Os dados do usuario devem estar preenchidos corretamente!");
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResponseDto()
+                        {
+                            Description = "Os dados do usuario devem estar preenchidos corretamente!",
+                            Status = StatusCodes.Status400BadRequest,
+
+                        });
+                    }
+                }
+                else
+                {
+                    _logger.LogError("Este usuario não é valido!");
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto()
+                    {
+                        Description = "Este usuario não é valido!",
+                        Status = StatusCodes.Status500InternalServerError,
+
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocorreu o seguinte erro na atualização dos dados do usuario: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto()
+                {
+                    Description = "Ocorreu o seguinte erro na atualização dos dados do usuario: " + ex.Message,
+                    Status = StatusCodes.Status500InternalServerError,
+
+                });
+
+            }
+
+
+        }
+
     }
 }

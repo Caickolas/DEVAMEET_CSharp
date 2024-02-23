@@ -31,5 +31,11 @@ namespace DEVAMEET_CSharp.Repository.Impl
         {
             return _context.Users.Any(u => u.Email == email);
         }
+
+        public void UpdateUser(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
     }
 }
