@@ -20,6 +20,8 @@ var connectstring = builder.Configuration.GetConnectionString("DefaulConnectStri
 builder.Services.AddDbContext<DevameetContext>(option => option.UseSqlServer(connectstring));
 
 builder.Services.AddScoped<IUserRepository, UserRepositoryImpl>();
+builder.Services.AddScoped<IMeetRepository, MeetRepositoryImpl>();
+builder.Services.AddScoped<IMeetObjectsRepository, MeetObjectsRepositoryImpl>();
 
 var jwtsettings = builder.Configuration.GetRequiredSection("JWT").Get<JWTKey>();
 

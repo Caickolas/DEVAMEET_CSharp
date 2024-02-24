@@ -3,6 +3,7 @@ using DEVAMEET_CSharp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DEVAMEET_CSharp.Migrations
 {
     [DbContext(typeof(DevameetContext))]
-    partial class DevameetContextModelSnapshot : ModelSnapshot
+    [Migration("20240224092724_MeetAndMeetObjects")]
+    partial class MeetAndMeetObjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
