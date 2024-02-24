@@ -10,7 +10,6 @@ namespace DEVAMEET_CSharp.Controllers
     public class UserController : BaseController
     {
         private readonly ILogger<AuthController> _logger;
-        private readonly IUserRepository _userRepository;
 
         public UserController(ILogger<AuthController> logger, IUserRepository userRepository) : base(userRepository)
         {

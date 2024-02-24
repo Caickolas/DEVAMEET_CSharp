@@ -33,7 +33,7 @@ namespace DEVAMEET_CSharp.Controllers
                 if (!String.IsNullOrEmpty(loginRequestDto.Login) && !String.IsNullOrEmpty(loginRequestDto.Password) && 
                     !String.IsNullOrWhiteSpace(loginRequestDto.Login) && !String.IsNullOrWhiteSpace(loginRequestDto.Password))
                 {
-                    User user = _userRepository.GetUserByLoginPassword(loginRequestDto.Login.ToLower(), loginRequestDto.Password.ToLower());
+                    User user = _userRepository.GetUserByLoginPassword(loginRequestDto.Login.ToLower(),MD5Utils.GenerateHashMD5(loginRequestDto.Password));
 
                     if (user != null)
                     {
@@ -41,7 +41,7 @@ namespace DEVAMEET_CSharp.Controllers
                         {
                             Email = user.Email,
                             Name = user.Name,
-                            Token = TokenService.CreateToken(user, _configuration["JWT: SecretKey"])
+                            Token = TokenService.CreateToken(user, _configuration["JWT:SecretKey"])
                         });
             }
                     else
@@ -122,7 +122,7 @@ namespace DEVAMEET_CSharp.Controllers
                         Email = userdto.email.ToLower(),
                         Password = MD5Utils.GenerateHashMD5(userdto.password),
                         Name = userdto.name,
-                        Avatar = userdto.Avatar
+                        Avatar = userdto.avatar
                     };
 
                     if (!_userRepository.VerifyEmail(user.Email))

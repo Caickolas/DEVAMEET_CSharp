@@ -1,5 +1,7 @@
 using DEVAMEET_CSharp;
 using DEVAMEET_CSharp.Models;
+using DEVAMEET_CSharp.Repository;
+using DEVAMEET_CSharp.Repository.Impl;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +18,8 @@ builder.Services.AddSwaggerGen();
 
 var connectstring = builder.Configuration.GetConnectionString("DefaulConnectString");
 builder.Services.AddDbContext<DevameetContext>(option => option.UseSqlServer(connectstring));
+
+builder.Services.AddScoped<IUserRepository, UserRepositoryImpl>();
 
 var jwtsettings = builder.Configuration.GetRequiredSection("JWT").Get<JWTKey>();
 

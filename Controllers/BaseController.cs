@@ -9,7 +9,7 @@ namespace DEVAMEET_CSharp.Controllers
     [Authorize]
     public class BaseController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        protected readonly IUserRepository _userRepository;
 
         public BaseController(IUserRepository userRepository)
         {
