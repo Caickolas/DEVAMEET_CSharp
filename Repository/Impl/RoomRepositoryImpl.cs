@@ -14,6 +14,14 @@ namespace DEVAMEET_CSharp.Repository.Impl
             _context = context;
         }
 
+        public async Task DeleteUserPosition(string clientId)
+        {
+            var room = await _context.Rooms.Where(r =>  r.ClientId == clientId).FirstOrDefaultAsync();
+
+            _context.Rooms.Remove(room);
+            await _context.SaveChangesAsync();
+        } 
+
         public async Task<ICollection<PositionDto>> ListUsersPosition(string link)
         {
             var meet = await _context.Meets.Where(m => m.Link == link).FirstOrDefaultAsync();
@@ -32,6 +40,16 @@ namespace DEVAMEET_CSharp.Repository.Impl
                 User = r.UserId.ToString(),
                 ClientId = r.ClientId
             }).ToList();
+        }
+
+        public async Task UpdateUserMute(MuteDto muteDto)
+        {
+            var meet = await _context.Meets.Where(m => m.Link == muteDto.Link).FirstOrDefaultAsync();
+            var room = await _context.Rooms.Where(r => r.MeetId == meet.Id && r.UserId == Int32.Parse(muteDto.UserId)).FirstOrDefaultAsync();
+
+            room.Muted = muteDto.Muted;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateUserPosition(int userId, string link, string clientId, UpdatePositionDto updatePositionDto)
@@ -68,5 +86,7 @@ namespace DEVAMEET_CSharp.Repository.Impl
 
             await _context.SaveChangesAsync();
         }
+
+
     }
 }
