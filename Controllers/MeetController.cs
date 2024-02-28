@@ -96,7 +96,7 @@ namespace DEVAMEET_CSharp.Controllers
                 meet.Color = meetUpdateDto.Color.ToString();
                 _meetRepository.UpdateMeet(meet);
                 List<MeetObjects> meetObjects = new List<MeetObjects>();
-                foreach (MeetObjectsDto objectsDto in meetUpdateDto.MeetObjects)
+                foreach (MeetObjectsDto objectsDto in meetUpdateDto.Objects)
                 {
                     MeetObjects meetObj = new MeetObjects();
                     meetObj.Name = objectsDto.Name;
@@ -104,6 +104,7 @@ namespace DEVAMEET_CSharp.Controllers
                     meetObj.X = objectsDto.X;
                     meetObj.Y = objectsDto.Y;
                     meetObj.ZIndex = objectsDto.ZIndex;
+                    meetObj.Walkable = objectsDto.Walkable == null ? true : false;
                     meetObj.MeetId = meet.Id;
                     meetObjects.Add(meetObj);
                 }

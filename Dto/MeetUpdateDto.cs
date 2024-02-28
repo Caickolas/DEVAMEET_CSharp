@@ -4,6 +4,6 @@
     {
         public string Name { get; set; }
         public string Color { get; set; }
-        public List<MeetObjectsDto> MeetObjects { get; set; }
+        public List<MeetObjectsDto> Objects { get; set; }
     }
 }
