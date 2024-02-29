@@ -27,5 +27,10 @@ namespace DEVAMEET_CSharp.Repository.Impl
                 _context.SaveChanges();
             }
         }
+
+        public List<MeetObjects> GetObjectsByMeet(int meetid)
+        {
+            return _context.MeetObjects.Where(o => o.MeetId == meetid).ToList();
+        }
     }
 }

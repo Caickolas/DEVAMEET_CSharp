@@ -1,4 +1,5 @@
 using DEVAMEET_CSharp;
+using DEVAMEET_CSharp.Hubs;
 using DEVAMEET_CSharp.Models;
 using DEVAMEET_CSharp.Repository;
 using DEVAMEET_CSharp.Repository.Impl;
@@ -23,6 +24,18 @@ builder.Services.AddScoped<IUserRepository, UserRepositoryImpl>();
 builder.Services.AddScoped<IMeetRepository, MeetRepositoryImpl>();
 builder.Services.AddScoped<IRoomRepository, RoomRepositoryImpl>();
 builder.Services.AddScoped<IMeetObjectsRepository, MeetObjectsRepositoryImpl>();
+
+builder.Services.AddSignalR();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ClientPermission", policy =>
+            policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("http://localhost:3000") // trocar caso hospede o site.
+            .AllowCredentials()
+        );
+});
 
 var jwtsettings = builder.Configuration.GetRequiredSection("JWT").Get<JWTKey>();
 
@@ -53,6 +66,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("ClientPermission");
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -60,5 +75,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<RoomHub>("/roomHub");
 
 app.Run();

@@ -86,6 +86,27 @@ namespace DEVAMEET_CSharp.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("objects")]
+        public IActionResult GetMeet(int meetid)
+        {
+            try
+            {
+
+                return Ok(_meetObjectsRepository.GetObjectsByMeet(meetid));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ocorreu o seguinte erro na busca dos objetos da sala de reunião: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto()
+                {
+                    Description = "Ocorreu o seguinte erro na busca dos objetos da sala de reunião: " + ex.Message,
+                    Status = StatusCodes.Status500InternalServerError,
+
+                });
+            }
+        }
+
         [HttpPut]
         public IActionResult UpdateMeet([FromBody] MeetUpdateDto meetUpdateDto, int meetId) 
         { 

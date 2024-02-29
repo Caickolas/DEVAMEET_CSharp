@@ -5,5 +5,6 @@ namespace DEVAMEET_CSharp.Repository
     public interface IMeetObjectsRepository
     {
         void CreateObjectsMeet(List<MeetObjects> meetObjectsNew, int meetId);
+        List<MeetObjects> GetObjectsByMeet(int meetid);
     }
 }

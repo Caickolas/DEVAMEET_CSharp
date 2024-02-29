@@ -39,7 +39,14 @@ namespace DEVAMEET_CSharp.Repository.Impl
 
         public List<Meet> GetMeetsByUser(int iduser)
         {
-            return _context.Meets.Where(m => m.UserId == iduser).ToList();
+            List<Meet> meets = _context.Meets.Where(m => m.UserId == iduser).ToList();
+
+            foreach (Meet meet in meets)
+            {
+                meet.MeetObjects = _context.MeetObjects.Where(m => m.MeetId == meet.Id).ToList();
+            }
+
+            return meets;
         }
 
         public void UpdateMeet(Meet meet)
