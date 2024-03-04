@@ -29,12 +29,13 @@ builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ClientPermission", policy =>
+    options.AddPolicy("ClientPermission", policy => 
+        {
             policy.AllowAnyHeader()
             .AllowAnyMethod()
             .WithOrigins("http://localhost:3000") // trocar caso hospede o site.
-            .AllowCredentials()
-        );
+            .AllowCredentials();
+        });
 });
 
 var jwtsettings = builder.Configuration.GetRequiredSection("JWT").Get<JWTKey>();

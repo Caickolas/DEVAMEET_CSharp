@@ -13,6 +13,8 @@ namespace DEVAMEET_CSharp.Models
         public int Y { get; set; }
         public string Orientation { get; set; }
         public bool Muted { get; set; }
+        public bool Busy { get; set; }
+
 
         [ForeignKey("Meet")]
         public int MeetId { get; set; }

@@ -9,12 +9,12 @@ namespace DEVAMEET_CSharp.Hubs
     {
         private readonly IRoomRepository _roomRepository;
 
-        private string ClientId => Context.ConnectionId; //Criação do Id do cliente dentro do WebSocket (SignalR)
-
         public RoomHub(IRoomRepository roomRepository)
         {
             _roomRepository = roomRepository;
         }
+
+        private string ClientId => Context.ConnectionId; //Criação do Id do cliente dentro do WebSocket (SignalR)
 
         public override async Task OnConnectedAsync() // entrada do cliente no hub e a geraão do ClientId
         {
@@ -25,7 +25,7 @@ namespace DEVAMEET_CSharp.Hubs
         public async Task Join(JoinDto joinDto)
         {
             var link = joinDto.Link;
-            var userId = joinDto.UserId;
+            var userId = Int32.Parse(joinDto.UserId);
 
             Console.WriteLine("O usuario" + userId.ToString() + " está se juntando a sala com o ClientID:" + ClientId + " através do link" + link);
 
@@ -75,6 +75,19 @@ namespace DEVAMEET_CSharp.Hubs
             var link = muteDto.Link;
 
             await _roomRepository.UpdateUserMute(muteDto);
+
+            var users = await _roomRepository.ListUsersPosition(link);
+
+            Console.WriteLine("Estamos enviando a nova movimentação para todos os usuarios");
+
+            await Clients.Group(link).SendAsync("update-user-list", new { Users = users });
+        }
+
+        public async Task UpdateUserStatus(StatusDto statusDto)
+        {
+            var link = statusDto.Link;
+
+            await _roomRepository.UpdateUserStatus(statusDto);
 
             var users = await _roomRepository.ListUsersPosition(link);
 

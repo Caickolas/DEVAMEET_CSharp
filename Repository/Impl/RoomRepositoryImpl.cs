@@ -87,6 +87,14 @@ namespace DEVAMEET_CSharp.Repository.Impl
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateUserStatus(StatusDto statusDto)
+        {
+            var meet = await _context.Meets.Where(m => m.Link == statusDto.Link).FirstOrDefaultAsync();
+            var room = await _context.Rooms.Where(r => r.MeetId == meet.Id && r.UserId == Int32.Parse(statusDto.UserId)).FirstOrDefaultAsync();
 
+            room.Busy = statusDto.Busy;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
